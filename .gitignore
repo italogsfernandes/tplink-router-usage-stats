@@ -139,4 +139,4 @@ cython_debug/
 
 # Personal
 logs/
-.config/
+.config
