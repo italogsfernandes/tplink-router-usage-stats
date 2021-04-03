@@ -1,0 +1,15 @@
+[JAIR]
+OUTPUT_FILE=/home/user/Documents/internet_logs/consumo_jair.log
+OUTPUT_FILE_COMPLETO=/home/user/Documents/internet_logs/consumo_jair_completo.log
+ROUTER_IP=http://192.168.1.1
+AUTH_TOKEN=
+
+[VAN]
+OUTPUT_FILE=/home/user/Documents/internet_logs/consumo.log
+OUTPUT_FILE_COMPLETO=/home/user/Documents/internet_logs/consumo_completo.log
+ROUTER_IP=http://192.168.0.1
+AUTH_TOKEN=
+
+[APELIDOS_MAC]
+00-00-00-00-00-00=Primeiro Apelido
+FF-FF-FF-FF-FF-FF=Outro Apelido
