@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import desc
-from models import Base, Device, DataUsageReading
+from models import Base, User, Device, DataUsageReading
 
 
 def write_output_to_file(stats, created_date, output_file, output_file_completo):
@@ -48,13 +48,30 @@ def save_output_in_database(stats, created_date):
         )
         session.add(data_usage_reading)
         session.commit()
+    read_and_print_database(session)
+
+def read_and_print_database(session):
     print("#"*80)
     print("# Dados salvos no banco de dados")
     print("#"*80)
-    for device in session.query(Device).order_by(desc(Device.total_byte)):
-        total_byte = device.get_full_total_byte(session)
-        total_device = device.get_total_best_unit(total_byte)
-        print(f"{device} | {total_device}")
+    for user in session.query(User).filter(User.username.in_(("casajair", "casavan"))).order_by(desc(User.total_byte)):
+        total_byte = user.get_total_byte(session)
+        total_preco = user.get_total_preco(total_byte)
+        total_best_unit = user.get_total_best_unit(total_byte)
+        
+        user.total_byte = total_byte
+        session.commit()
+        print(f"{user} | {total_best_unit} --> R$ {total_preco:.2f}")
+    print("#"*80)
+
+    for user in session.query(User).filter(~User.username.in_(("casajair", "casavan"))).order_by(desc(User.total_byte)):
+        total_byte = user.get_total_byte(session)
+        total_preco = user.get_total_preco(total_byte)
+        total_best_unit = user.get_total_best_unit(total_byte)
+        
+        user.total_byte = total_byte
+        session.commit()
+        print(f"{user} | {total_best_unit} --> R$ {total_preco:.2f}")
     print("#"*80)
 
 def get_or_create(session, model, **kwargs):

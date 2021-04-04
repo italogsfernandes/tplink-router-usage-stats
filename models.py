@@ -9,11 +9,18 @@ from sqlalchemy import desc
 Base = declarative_base()
 
 
-class User(Base):
+class User(StatDataMixin, Base):
     __tablename__ = 'user'
 
     username = Column(String(250), primary_key=True)
     name = Column(String(250), nullable=False)
+    total_byte = Column(Integer)
+
+    def get_total_byte(self, session):
+        total_byte = 0
+        for device in session.query(Device).filter(Device.owner==self).order_by(desc(Device.total_byte)):
+            total_byte += device.get_full_total_byte(session)
+        return total_byte
 
     def __repr__(self):
         return f"User({self.__str__()})"
