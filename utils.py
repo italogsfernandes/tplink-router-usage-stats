@@ -24,7 +24,7 @@ def write_output_to_file(stats, created_date, output_file, output_file_completo)
             file.write('\n')
 
 
-def save_output_in_database(stats, created_date):
+def save_output_in_database(stats, created_date, show_result=True):
     engine = create_engine('sqlite:///database.db')
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
@@ -48,7 +48,9 @@ def save_output_in_database(stats, created_date):
         )
         session.add(data_usage_reading)
         session.commit()
-    read_and_print_database(session)
+
+    if show_result:
+        read_and_print_database(session)
 
 def read_and_print_database(session):
     print("#"*80)

@@ -1,26 +1,23 @@
-import requests
-
-from datetime import datetime
-
-from config import load_config
-from clients import WR720NClient
-from utils import write_output_to_file, save_output_in_database
+import app_van
+import app_jair
 
 
 def main():
-    (router_ip,
-     auth_token,
-     output_file,
-     output_file_completo) = load_config("VAN")
+    print("#"*80)
+    print("# Van")
+    print("#"*80)
+    try:
+        app_van.main(show_result=False)
+    except Exception as exc:
+        print(exc)
 
-    created_date = datetime.now()
-    stats = WR720NClient(router_ip, auth_token).get_stats_data()
-
-    write_output_to_file(
-        stats, created_date, output_file, output_file_completo
-    )
-
-    save_output_in_database(stats, created_date)
+    print("#"*80)
+    print("# Jair")
+    print("#"*80)
+    try:
+        app_jair.main(show_result=True)
+    except Exception as exc:
+        print(exc)
 
 if __name__ == '__main__':
     main()
